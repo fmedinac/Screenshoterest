@@ -1,4 +1,6 @@
-/*
+
+ *  Screenshoterest based on:
+ *
  *  Blipshot
  *  Screenshotter.js
  *  Half of the screenshotter algorithm. See Screenshotter.DOM.js for the other half.
@@ -41,6 +43,7 @@ var Screenshotter = {
     imageDirtyCutAt: [],
     imageDataURLPartial: [],
     responsiveHeights: [],
+    tabId: 0,
   
   shared: {
     imageDataURL: 0,
@@ -80,7 +83,7 @@ var Screenshotter = {
     },
     
     resizeWindow: function(){
-        UI.status('azure', "resize");
+        UI.status('azure', "resize", 2000);
         var self = this;
         
         chrome.windows.getLastFocused(function (win) {
@@ -145,6 +148,7 @@ var Screenshotter = {
     
     // ****** Get tab data
     chrome.windows.getCurrent(function(win) {
+      tabId = win.id;
       chrome.tabs.getSelected(win.id, function(tab) {
         self.shared.tab = tab;
         
@@ -188,7 +192,7 @@ var Screenshotter = {
   // 4
   screenshotEnd: function(shared,cut) {
     var self = this;
-    UI.status('azure', "make");
+    UI.status('azure', "make", 2000);
       
       self.imageDirtyCutAt.push(cut);
 //    ++self.responsiveScreen;
@@ -237,8 +241,13 @@ var Screenshotter = {
           case "grabResponsive": self.grab(); break;
           case "screenshotVisibleArea": self.screenshotVisibleArea(e.shared); break;
           case "screenshotEnd": self.screenshotEnd(e.shared, e.cut); break;
+          case "removeDiv": self.removeDiv(); break;
         }
     });
+  },
+
+  removeDiv: function(){
+    UI.status('','',1);
   },
   
   // ****************************************************************************************** SUPPORT
@@ -380,10 +389,21 @@ var Screenshotter = {
           }
 //            canvas.height = 600;
           
+            UI.status('orange', "upload");
+
              var http = new XMLHttpRequest();
             var url = 'http://www.felipemedina.com.br/Huge/Pint/createFile.php';
 //            var url = 'http://localhost/huge/PinterestChromeExtension/0_Tech/0_Prototype/Blipshot-master/php/createFile.php';
-            var params = "data="+canvas.toDataURL("image/jpeg",0.8);
+
+            var quality = 0.8;
+            var params = "data="+canvas.toDataURL("image/webp",quality);
+
+            while(params.length > 320000){
+              // console.log("decreasing"+params.length);
+              quality -= 0.1;
+              params = "data="+canvas.toDataURL("image/webp",quality);
+            }
+            // console.log("final: "+params.length);
 //            xhr.onreadystatechange = handleStateChange; // Implemented elsewhere.
             http.open("POST", url, true);
             
@@ -436,4 +456,4 @@ var Screenshotter = {
 
 /* \/ Initialize callback listeners */
 Screenshotter.eventManagerInit();
-/* /\ Initialize callback listeners */
+/* /\ Initialize callback listeners 

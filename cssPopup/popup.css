@@ -22,4 +22,22 @@
     color: #333;
     font-size: 12px;
     padding: 10px;
+    outline: none;
+}
+
+.popup .glyphicon {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background: center center no-repeat;
+    background-size: contain;
+    opacity: .5;
+    margin-right: 5px;
+    margin-bottom: -9px;
+}
+.popup .glyphicon.noun-64675 {
+    background-image: url("../img/noun_64675_cc.svg");
+}
+.popup .glyphicon.noun-65753 {
+    background-image: url("../img/noun_65753_cc.svg");
 }

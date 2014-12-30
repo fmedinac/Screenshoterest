@@ -22,6 +22,11 @@ var UI = {
         chrome.browserAction.setBadgeText({ text: "" });
       }, timed);
     }
+  },
+  clear: function() {
+    chrome.browserAction.setBadgeText({
+        text: ''
+    });
   }
 }
 
@@ -37,6 +42,9 @@ var $ = jQuery;
 
 $(document).ready(function(){
     $(".popup li a").click(function(){
+        $("ul").hide();
+        $(".loading").show();
+
         if($(this).attr("class") == "simple"){
           UI.status('red', "take");
           Screenshotter.grabSimple();

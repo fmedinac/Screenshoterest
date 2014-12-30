@@ -2,9 +2,9 @@
   "manifest_version": 2,
 
 
-  "name": "Screenshoterest 2",
+  "name": "Screenshoterest",
   "version": "2.0",
-  "description": "Click on the button to take a screenshot. A Pinterest window will open automatically. If you want, you can drag the picture to your desktop to save it.",
+  "description": "Click the button to take a screenshot. A Pinterest window will open. If you want, you can drag the picture to desktop to save it.",
   "author": "Felipe Medina (based on Blipshot by Davide Casali)",
 
 
@@ -17,10 +17,7 @@
   },
 
   "options_page": "options.html",
-
-//  "background": {
-//    "scripts": ["jquery.min.js", "screenshotter.js", "actions.js"]
-//  },
+  
   "content_scripts": [ 
     { "js": ["jquery.min.js",  "screenshotter.DOM.js" ], "matches": [ "<all_urls>" ], "run_at": "document_end" }
   ],

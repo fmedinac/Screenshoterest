@@ -1,4 +1,6 @@
 /*
+ *  Screenshoterest based on:
+ *
  *  Blipshot
  *  Screenshotter.DOM.js
  *  Half of the screenshotter algorithm. See Screenshotter.js for the other half.
@@ -38,6 +40,8 @@
       totalHeight = 0,
       steps = 0,
       actualStep = 0,
+      currentStep = 0,
+      maxSteps = 10,
       res = [],
       bodyOverflowX;
   
@@ -48,11 +52,13 @@
     res = [];
     bodyOverflowX = $("body").css("overflow-x");
     enableFixedPosition(false);
+    currentStep = 0;
       
     shared.originalScrollTop = window.document.body.scrollTop; // ->[] save user scrollTop
     shared.tab.hasVscrollbar = (window.innerHeight < window.document.body.scrollHeight);
     window.document.body.scrollTop = 0;
     setTimeout(function() { screenshotVisibleArea(shared); }, 100);
+
   }
   
   // 2
@@ -66,6 +72,8 @@
         html = document.documentElement;
 
         totalHeight = Math.max( body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight );
+
+        ++currentStep;
     },100);
   }
     
@@ -104,7 +112,7 @@ function restoreFixedElements() {
     //TODO: bug: doesn't screenshot correctly
     window.document.body.scrollTop += window.innerHeight; // scroll!
     
-    if (window.document.body.scrollTop == scrollTopCurrent) {
+    if (window.document.body.scrollTop == scrollTopCurrent || currentStep > maxSteps) {
       // END ||
       restoreFixedElements();
         
@@ -133,25 +141,27 @@ function restoreFixedElements() {
     
     // ****** Add DOM Elements to Page
     var div = window.document.createElement('div');
-    div.id = "blipshot";
-    div.innerHTML = '<div id="blipshot-dim" style="position: absolute !important; height: ' + window.document.body.scrollHeight + 'px !important; width: 100% !important; top: 0px !important; left: 0px !important; background: #000000 !important; opacity: 0.66 !important; z-index: 666666 !important;"> </div>';
-    div.innerHTML += '<p style="-webkit-box-shadow: 0px 5px 10px #000000; margin: 20px; background: #ffffff; position: absolute; top: 0; right: 0; z-index: 666667 !important;"><img id="blipshot-img" alt="' + filename + '" src="' +  blobURL + '" width= "400" /></p>';
+    div.id = "screenshoterest";
+    div.innerHTML = '<div id="screenshoterest-dim" style="position: fixed !important; height: ' + window.document.body.scrollHeight + 'px !important; width: 100% !important; top: 0px !important; left: 0px !important; background: #000000 !important; opacity: 0.66 !important; z-index: 6666666 !important;"> </div>';
+    div.innerHTML += '<p style="-webkit-box-shadow: 0px 5px 10px #000000; margin: 20px; background: #ffffff; position: fixed; top: 0; right: 0; z-index: 6666667 !important;"><img id="screenshoterest-img" alt="' + filename + '" src="' +  blobURL + '" width= "400" /></p>';
     window.document.body.appendChild(div);
     
     // ****** Add Event Listeners
     function actionRemoveDiv() {
       // Closes the extension overlays.
-      var blipshotdiv = window.document.getElementById('blipshot');
-      if (blipshotdiv) blipshotdiv.parentElement.removeChild(blipshotdiv);
+      var screenshoterestdiv = window.document.getElementById('screenshoterest');
+      if (screenshoterestdiv) screenshoterestdiv.parentElement.removeChild(screenshoterestdiv);
       
+      chrome.extension.sendMessage({ action: 'removeDiv'});
+
       // Cleanup
       window.webkitURL.revokeObjectURL(blobURL);
     }
     function actionDrag(e) {
       e.dataTransfer.setData("DownloadURL", "image/png:" + filename + ".png:" + blobURL);
     }
-    window.document.getElementById('blipshot-dim').addEventListener("click", actionRemoveDiv);
-    window.document.getElementById('blipshot-img').addEventListener("dragstart", actionDrag);
+    window.document.getElementById('screenshoterest-dim').addEventListener("click", actionRemoveDiv);
+    window.document.getElementById('screenshoterest-img').addEventListener("dragstart", actionDrag);
   }
   
   // ****************************************************************************************** EVENT MANAGER / HALF
