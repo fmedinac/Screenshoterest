@@ -1,0 +1,25 @@
+* {
+    font-family: "Verdana", "sans-serif";
+}
+.popup {
+    display: block;
+    width: 220px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.popup li {
+    display: block;
+    float: left;
+    width: 100%;
+}
+.popup li:hover {
+    background: #eee;
+}
+.popup li a {
+    display: block;
+    text-decoration: none;
+    color: #333;
+    font-size: 12px;
+    padding: 10px;
+}
