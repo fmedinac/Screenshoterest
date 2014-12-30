@@ -2,7 +2,7 @@
 
 Chrome extension that take printscreen of whole page and posts it to Pinterest.
 
-## Blipshot (Giving credits to whom deserves it)
+## Blipshot (Give credit where credit is due)
 
 The screenshot core that I used to get started was awesome made by Davide Casali (@folleto / http://intenseminimalism.com/). The code is BSD Opensource License, as mine is.
 
