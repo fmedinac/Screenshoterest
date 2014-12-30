@@ -17,17 +17,17 @@ http://
 
 ### Changelog
 
-# 12/30/2014
+#### 12/30/2014
 Getting back to development of this and preparing to public release
 
-# 05/15/2014
+#### 05/15/2014
 Second internal (hugeinc) release
 
-# 05/10/2014
+#### 05/10/2014
 Why not responsive screenshots?
 
-# 05/05/2014
+#### 05/05/2014
 First internal (hugeinc) release
 
-# 04/30/2014
+#### 04/30/2014
 Started the development after some guys of Hugeinc chalenged me
